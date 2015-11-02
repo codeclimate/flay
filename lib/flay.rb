@@ -5,6 +5,7 @@ require "rubygems"
 require "sexp_processor"
 require "ruby_parser"
 require "timeout"
+require "concurrent"
 
 class File
   RUBY19 = "<3".respond_to? :encoding unless defined? RUBY19 # :nodoc:
@@ -208,10 +209,13 @@ class Flay
 
   def initialize option = nil
     @option = option || Flay.default_options
-    @hashes = Hash.new { |h,k| h[k] = [] }
 
-    self.identical      = {}
-    self.masses         = {}
+    @hashes = Concurrent::Hash.new do |hash, key|
+      hash[key] = Concurrent::Array.new
+    end
+
+    self.identical      = Concurrent::Map.new
+    self.masses         = Concurrent::Hash.new
     self.total          = 0
     self.mass_threshold = @option[:mass]
   end
