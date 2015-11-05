@@ -19,7 +19,8 @@ class TestSexp < Minitest::Test
     hash = s(:iter,
              s(:call, s(:arglist, s(:lit))),
              s(:lasgn),
-             s(:call, s(:arglist))).hash
+             s(:call, s(:arglist))).structural_hash
+
 
     assert_equal hash, @s.deep_clone.structural_hash
     assert_equal hash, @s.structural_hash
@@ -46,12 +47,12 @@ class TestSexp < Minitest::Test
           s(:call, s(:arglist)))
 
     expected = [
-                s[1]      .hash,
-                s[1][1]   .hash,
-                s[1][1][1].hash,
-                s[2]      .hash,
-                s[3]      .hash,
-                s[3][1]   .hash,
+                s[1]      .structural_hash,
+                s[1][1]   .structural_hash,
+                s[1][1][1].structural_hash,
+                s[2]      .structural_hash,
+                s[3]      .structural_hash,
+                s[3][1]   .structural_hash,
                ].sort
 
     assert_equal expected, @s.all_structural_subhashes.sort.uniq

@@ -6,6 +6,7 @@ require "sexp_processor"
 require "ruby_parser"
 require "timeout"
 require "concurrent"
+require "digest"
 
 class File
   RUBY19 = "<3".respond_to? :encoding unless defined? RUBY19 # :nodoc:
@@ -579,7 +580,7 @@ class Sexp
   # modify the sexp afterwards and expect it to be correct.
 
   def structural_hash
-    @structural_hash ||= self.structure.hash
+    @structural_hash ||= Digest::MD5.hexdigest(self.structure.to_s)
   end
 
   ##
