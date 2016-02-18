@@ -215,7 +215,7 @@ class Flay
       hash[key] = Concurrent::Array.new
     end
 
-    self.identical      = Concurrent::Map.new
+    self.identical      = Concurrent::Hash.new
     self.masses         = Concurrent::Hash.new
     self.total          = 0
     self.mass_threshold = @option[:mass]
